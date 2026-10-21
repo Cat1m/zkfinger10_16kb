@@ -59,6 +59,12 @@ class ZkFinger {
     return _channel.invokeMethod('delete', <String, String?>{'id': userId});
   }
 
+  /// Memory page size of the device in bytes (4096 or 16384).
+  /// Does not load any ZKTeco native library.
+  static Future<int?> getPageSize() async {
+    return _channel.invokeMethod<int>('getPageSize');
+  }
+
   static Future<bool?> onDestroy() async {
     return await _channel.invokeMethod('onDestroy');
   }

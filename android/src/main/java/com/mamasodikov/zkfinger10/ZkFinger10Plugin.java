@@ -70,6 +70,8 @@ public class ZkFinger10Plugin implements FlutterPlugin, MethodCallHandler, Activ
             "updateUserFeature";
     private static final String METHOD_CHECK_USER_EXISTS =
             "checkUserExists";
+    private static final String METHOD_GET_PAGE_SIZE =
+            "getPageSize";
 
     private static final String CHANNEL_FINGER_STATUS_CHANGE = "com.mamasodikov.zkfinger10/status_change";
     private static final String CHANNEL_FINGER_IMAGE = "com.mamasodikov.zkfinger10/finger_image";
@@ -231,6 +233,11 @@ public class ZkFinger10Plugin implements FlutterPlugin, MethodCallHandler, Activ
     @Override
     public void onMethodCall(MethodCall call, Result result) {
         this.result = result;
+        // Handled before ZKFingerPrintHelper is created so no ZKTeco native library is touched
+        if (METHOD_GET_PAGE_SIZE.equals(call.method)) {
+            result.success(android.system.Os.sysconf(android.system.OsConstants._SC_PAGESIZE));
+            return;
+        }
         if (zkFingerPrintHelper == null && activity != null && context != null) {
             zkFingerPrintHelper = new ZKFingerPrintHelper(activity, context, this);
         }

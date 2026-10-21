@@ -1,3 +1,27 @@
+# flutter_zkfinger10 (fork nội bộ)
+
+Fork của [zkfinger10 1.0.0+2](https://pub.dev/packages/zkfinger10) (Mamasodikov/zk_finger_10), dùng cho HisMobile.
+
+## Thay đổi so với bản gốc
+- **Vá 16 KB page size** cho 4 thư viện ZKTeco arm64 (`libslkidcap`, `libzkalg12`, `libzkfinger10`, `libzksensorcore`).
+  Các file này được build bằng GCC 4.9 (NDK <= r17): segment LOAD đã căn 64 KB, nhưng `PT_GNU_RELRO` kết thúc ở mốc 4 KB,
+  nên trên máy 16 KB linker `mprotect` lan sang `.data` gây SIGSEGV. Script `tool/patch_relro.py` đổi header RELRO thành `PT_NULL`
+  (chỉ đổi 4 byte, không đổi offset/size). Đánh đổi: các thư viện này không còn RELRO hardening.
+  Kiểm tra: `python tool/patch_relro.py --check` (exit 0 = an toàn).
+- Thêm `ZkFinger.getPageSize()` (không tải thư viện native của ZKTeco).
+
+SHA-256 trước -> sau khi vá:
+| File | Gốc | Đã vá |
+|---|---|---|
+| libslkidcap.so | 6dac3900…f4bbcc | 7135e355…c3ab64 |
+| libzkalg12.so | da72ee1d…1ab276 | b55e9c7c…a203ce |
+| libzkfinger10.so | cb61502f…fef3f3 | c9e962f4…718363 |
+| libzksensorcore.so | 8e87eaac…caf794 | 0d1d2de2…29a684 |
+
+Khi ZKTeco phát hành SDK build bằng NDK r28+, thay `.so`/`.jar` trong `android/libs` và bỏ bản vá.
+
+---
+
 <div align="center"><a href="https://github.com/Safouene1/support-palestine-banner/blob/master/Markdown-pages/Support.md"><img src="https://raw.githubusercontent.com/Safouene1/support-palestine-banner/master/banner-project.svg" alt="Support Palestine" style="width: 100%;"></a></div>
 
 # zkfinger10 - Modern Fingerprint Plugin for Flutter 🚀

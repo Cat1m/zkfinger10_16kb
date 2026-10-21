@@ -1,3 +1,8 @@
+## 1.0.0+2-16kb (fork)
+
+* Patch PT_GNU_RELRO -> PT_NULL in arm64 ZKTeco libraries for 16 KB page size devices (`tool/patch_relro.py`).
+* Add `ZkFinger.getPageSize()`.
+
 ## 1.0.0 - Major Modernization Release 🚀
 
 **BREAKING CHANGES:**
