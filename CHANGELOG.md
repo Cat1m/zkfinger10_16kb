@@ -1,3 +1,7 @@
+## 1.0.0+2-16kb.2 (fork)
+
+* Add `ZkFinger.selfTest()`: load ZKTeco native libraries and init the algorithm without a scanner (16 KB device check).
+
 ## 1.0.0+2-16kb (fork)
 
 * Patch PT_GNU_RELRO -> PT_NULL in arm64 ZKTeco libraries for 16 KB page size devices (`tool/patch_relro.py`).

@@ -72,6 +72,8 @@ public class ZkFinger10Plugin implements FlutterPlugin, MethodCallHandler, Activ
             "checkUserExists";
     private static final String METHOD_GET_PAGE_SIZE =
             "getPageSize";
+    private static final String METHOD_SELF_TEST =
+            "selfTest";
 
     private static final String CHANNEL_FINGER_STATUS_CHANGE = "com.mamasodikov.zkfinger10/status_change";
     private static final String CHANNEL_FINGER_IMAGE = "com.mamasodikov.zkfinger10/finger_image";
@@ -238,6 +240,10 @@ public class ZkFinger10Plugin implements FlutterPlugin, MethodCallHandler, Activ
             result.success(android.system.Os.sysconf(android.system.OsConstants._SC_PAGESIZE));
             return;
         }
+        if (METHOD_SELF_TEST.equals(call.method)) {
+            result.success(selfTest());
+            return;
+        }
         if (zkFingerPrintHelper == null && activity != null && context != null) {
             zkFingerPrintHelper = new ZKFingerPrintHelper(activity, context, this);
         }
@@ -298,6 +304,36 @@ public class ZkFinger10Plugin implements FlutterPlugin, MethodCallHandler, Activ
             default:
                 result.notImplemented();
         }
+    }
+
+    /**
+     * Loads the ZKTeco native libraries and initializes the fingerprint algorithm
+     * without a scanner attached. Used to check 16 KB page size devices: a broken
+     * library crashes the process (SIGSEGV) instead of returning.
+     */
+    private List<String> selfTest() {
+        List<String> logs = new java.util.ArrayList<>();
+        logs.add("pageSize=" + android.system.Os.sysconf(android.system.OsConstants._SC_PAGESIZE)
+                + " abi=" + android.os.Build.SUPPORTED_ABIS[0]
+                + " sdk=" + android.os.Build.VERSION.SDK_INT);
+        for (String lib : new String[]{"zksensorcore", "slkidcap", "zkalg12", "zkfinger10"}) {
+            try {
+                System.loadLibrary(lib);
+                logs.add("loadLibrary(" + lib + ") OK");
+            } catch (Throwable e) {
+                logs.add("loadLibrary(" + lib + ") FAILED: " + e);
+            }
+        }
+        try {
+            logs.add("ZKFingerService.init() = " + com.zkteco.android.biometric.module.fingerprintreader.ZKFingerService.init());
+            byte[] version = new byte[64];
+            com.zkteco.zkfinger.FingerprintService.version(version);
+            logs.add("FingerprintService.version = " + new String(version).trim());
+            logs.add("FingerprintService.count() = " + com.zkteco.zkfinger.FingerprintService.count());
+        } catch (Throwable e) {
+            logs.add("Algorithm FAILED: " + e);
+        }
+        return logs;
     }
 
     private String getUserId(MethodCall call) {

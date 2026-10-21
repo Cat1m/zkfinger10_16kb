@@ -65,6 +65,13 @@ class ZkFinger {
     return _channel.invokeMethod<int>('getPageSize');
   }
 
+  /// Loads the ZKTeco native libraries and initializes the algorithm without a
+  /// scanner attached. Returns log lines; a broken library crashes the app.
+  static Future<List<String>> selfTest() async {
+    final result = await _channel.invokeListMethod<String>('selfTest');
+    return result ?? const [];
+  }
+
   static Future<bool?> onDestroy() async {
     return await _channel.invokeMethod('onDestroy');
   }
