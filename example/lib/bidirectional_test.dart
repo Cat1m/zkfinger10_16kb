@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zkfinger10/zk_finger.dart';
+import 'package:zkfinger10_16kb/zk_finger.dart';
 
 class BidirectionalTestPage extends StatefulWidget {
   const BidirectionalTestPage({Key? key}) : super(key: key);

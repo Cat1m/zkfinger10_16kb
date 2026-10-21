@@ -1,4 +1,4 @@
-package com.mamasodikov.zkfinger10;
+package io.github.cat1m.zkfinger10_16kb;
 
 import static java.nio.file.Paths.get;
 
@@ -8,9 +8,9 @@ import android.graphics.Bitmap;
 
 import androidx.annotation.NonNull;
 
-import com.mamasodikov.zkfinger10.util.FingerListener;
-import com.mamasodikov.zkfinger10.util.FingerStatus;
-import com.mamasodikov.zkfinger10.util.FingerStatusType;
+import io.github.cat1m.zkfinger10_16kb.util.FingerListener;
+import io.github.cat1m.zkfinger10_16kb.util.FingerStatus;
+import io.github.cat1m.zkfinger10_16kb.util.FingerStatusType;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
@@ -75,8 +75,8 @@ public class ZkFinger10Plugin implements FlutterPlugin, MethodCallHandler, Activ
     private static final String METHOD_SELF_TEST =
             "selfTest";
 
-    private static final String CHANNEL_FINGER_STATUS_CHANGE = "com.mamasodikov.zkfinger10/status_change";
-    private static final String CHANNEL_FINGER_IMAGE = "com.mamasodikov.zkfinger10/finger_image";
+    private static final String CHANNEL_FINGER_STATUS_CHANGE = "io.github.cat1m.zkfinger10_16kb/status_change";
+    private static final String CHANNEL_FINGER_IMAGE = "io.github.cat1m.zkfinger10_16kb/finger_image";
     private static PublishSubject<FingerStatus> fingerStatusSubject = PublishSubject.create();
     private static PublishSubject<byte[]> fingerImageSubject = PublishSubject.create();
 
@@ -127,7 +127,7 @@ public class ZkFinger10Plugin implements FlutterPlugin, MethodCallHandler, Activ
     }
 
     private void setupChannels(BinaryMessenger messenger) {
-        channel = new MethodChannel(messenger, "zkfinger");
+        channel = new MethodChannel(messenger, "io.github.cat1m.zkfinger10_16kb/method");
         channel.setMethodCallHandler(this);
 
         statusChangeEventChannel = new EventChannel(messenger, CHANNEL_FINGER_STATUS_CHANGE);

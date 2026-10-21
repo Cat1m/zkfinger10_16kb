@@ -10,9 +10,9 @@ import 'package:uuid/uuid.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:zkfinger10/finger_status.dart';
-import 'package:zkfinger10/finger_status_type.dart';
-import 'package:zkfinger10/zk_finger.dart';
+import 'package:zkfinger10_16kb/finger_status.dart';
+import 'package:zkfinger10_16kb/finger_status_type.dart';
+import 'package:zkfinger10_16kb/zk_finger.dart';
 import 'package:zkfinger10_example/network_info.dart';
 
 import 'functions.dart';

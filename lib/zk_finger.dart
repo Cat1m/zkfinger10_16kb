@@ -4,12 +4,13 @@ import 'package:flutter/services.dart';
 
 ///TODO: Catch app lifecycles on kill (and close connection)
 class ZkFinger {
-  static const MethodChannel _channel = const MethodChannel('zkfinger');
+  static const MethodChannel _channel =
+      const MethodChannel('io.github.cat1m.zkfinger10_16kb/method');
 
   static const EventChannel statusChangeStream =
-      EventChannel('com.mamasodikov.zkfinger10/status_change');
+      EventChannel('io.github.cat1m.zkfinger10_16kb/status_change');
   static const EventChannel imageStream =
-      EventChannel('com.mamasodikov.zkfinger10/finger_image');
+      EventChannel('io.github.cat1m.zkfinger10_16kb/finger_image');
 
   static Future<String?> get platformVersion async {
     return _channel.invokeMethod('getPlatformVersion');
@@ -51,8 +52,10 @@ class ZkFinger {
     return await _channel.invokeMethod('clear');
   }
 
-  static Future<bool?> clearAndLoadDatabase({Map<String, String>? vUserList}) async {
-    return await _channel.invokeMethod('clearAndLoad', <String, Map<String, String>? >{'fingers': vUserList});
+  static Future<bool?> clearAndLoadDatabase(
+      {Map<String, String>? vUserList}) async {
+    return await _channel.invokeMethod(
+        'clearAndLoad', <String, Map<String, String>?>{'fingers': vUserList});
   }
 
   static Future<bool?> delete({String? userId}) async {
@@ -81,7 +84,8 @@ class ZkFinger {
   /// Get fingerprint feature data for a specific user ID
   static Future<String?> getUserFeature({required String userId}) async {
     try {
-      return await _channel.invokeMethod('getUserFeature', <String, String>{'id': userId});
+      return await _channel
+          .invokeMethod('getUserFeature', <String, String>{'id': userId});
     } catch (e) {
       return null;
     }
@@ -110,12 +114,11 @@ class ZkFinger {
   }
 
   /// Update fingerprint feature data for an existing user
-  static Future<bool?> updateUserFeature({required String userId, required String feature}) async {
+  static Future<bool?> updateUserFeature(
+      {required String userId, required String feature}) async {
     try {
-      return await _channel.invokeMethod('updateUserFeature', <String, String>{
-        'id': userId,
-        'data': feature
-      });
+      return await _channel.invokeMethod(
+          'updateUserFeature', <String, String>{'id': userId, 'data': feature});
     } catch (e) {
       return false;
     }
@@ -124,7 +127,8 @@ class ZkFinger {
   /// Check if a user exists in the database
   static Future<bool?> checkUserExists({required String userId}) async {
     try {
-      return await _channel.invokeMethod('checkUserExists', <String, String>{'id': userId});
+      return await _channel
+          .invokeMethod('checkUserExists', <String, String>{'id': userId});
     } catch (e) {
       return false;
     }

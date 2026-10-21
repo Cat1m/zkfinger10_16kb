@@ -1,4 +1,4 @@
-package com.mamasodikov.zkfinger10.ZKUSBManager;
+package io.github.cat1m.zkfinger10_16kb.ZKUSBManager;
 
 import android.hardware.usb.UsbDevice;
 

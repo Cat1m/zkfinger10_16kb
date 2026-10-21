@@ -1,4 +1,4 @@
-package com.mamasodikov.zkfinger10;
+package io.github.cat1m.zkfinger10_16kb;
 
 import android.Manifest;
 import android.app.Activity;
@@ -12,11 +12,11 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.mamasodikov.zkfinger10.ZKUSBManager.ZKUSBManager;
-import com.mamasodikov.zkfinger10.ZKUSBManager.ZKUSBManagerListener;
-import com.mamasodikov.zkfinger10.util.FingerListener;
-import com.mamasodikov.zkfinger10.util.FingerStatusType;
-import com.mamasodikov.zkfinger10.util.PermissionUtils;
+import io.github.cat1m.zkfinger10_16kb.ZKUSBManager.ZKUSBManager;
+import io.github.cat1m.zkfinger10_16kb.ZKUSBManager.ZKUSBManagerListener;
+import io.github.cat1m.zkfinger10_16kb.util.FingerListener;
+import io.github.cat1m.zkfinger10_16kb.util.FingerStatusType;
+import io.github.cat1m.zkfinger10_16kb.util.PermissionUtils;
 import com.zkteco.android.biometric.FingerprintExceptionListener;
 import com.zkteco.android.biometric.core.device.ParameterHelper;
 import com.zkteco.android.biometric.core.device.TransportType;

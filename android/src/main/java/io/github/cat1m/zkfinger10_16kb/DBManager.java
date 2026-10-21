@@ -1,4 +1,4 @@
-package com.mamasodikov.zkfinger10;
+package io.github.cat1m.zkfinger10_16kb;
 
 import android.content.ContentValues;
 import android.database.Cursor;

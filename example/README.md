@@ -1,6 +1,6 @@
 # zkfinger10_example
 
-Demonstrates how to use the zkfinger10 plugin.
+Demonstrates how to use the zkfinger10_16kb plugin.
 
 ## Getting Started
 

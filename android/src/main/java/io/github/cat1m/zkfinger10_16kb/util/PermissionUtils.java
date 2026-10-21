@@ -1,4 +1,4 @@
-package com.mamasodikov.zkfinger10.util;
+package io.github.cat1m.zkfinger10_16kb.util;
 
 import android.app.Activity;
 import android.content.pm.PackageManager;
