@@ -6,3 +6,9 @@ build/
 .gradle/
 local.properties
 pubspec.lock
+.flutter-plugins
+.flutter-plugins-dependencies
+**/GeneratedPluginRegistrant.java
+**/android/gradlew
+**/android/gradlew.bat
+**/android/gradle/wrapper/gradle-wrapper.jar

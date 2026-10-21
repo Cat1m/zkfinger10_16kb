@@ -1,4 +1,4 @@
-group 'com.mamasodikov.zkfinger10'
+group 'io.github.cat1m.zkfinger10_16kb'
 version '1.0'
 
 buildscript {
@@ -8,7 +8,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.7.2'
+        classpath 'com.android.tools.build:gradle:8.11.1'
     }
 }
 
@@ -45,7 +45,7 @@ android {
         }
     }
 
-    namespace 'com.mamasodikov.zkfinger10'
+    namespace 'io.github.cat1m.zkfinger10_16kb'
 }
 
 dependencies {
