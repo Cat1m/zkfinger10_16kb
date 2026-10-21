@@ -1,3 +1,7 @@
+// Names and order mirror the Java FingerStatusType enum (matched by index) and
+// the original zkfinger10 API, so they are kept as-is.
+// ignore_for_file: constant_identifier_names
+
 enum FingerStatusType {
   INITIALIZED,
   MOUNTED,

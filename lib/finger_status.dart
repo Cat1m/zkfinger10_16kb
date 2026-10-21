@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'finger_status_type.dart';
 
 class FingerStatus {
@@ -8,11 +10,11 @@ class FingerStatus {
   final String id;
   final String data;
 
-  log() {
-    print('======Finger Status======');
-    print('Message: $message');
-    print('Id: $id');
-    print('Status: $statusType');
-    print('Data: $data');
+  void log() {
+    debugPrint('======Finger Status======');
+    debugPrint('Message: $message');
+    debugPrint('Id: $id');
+    debugPrint('Status: $statusType');
+    debugPrint('Data: $data');
   }
 }

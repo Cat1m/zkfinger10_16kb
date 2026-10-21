@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 ///TODO: Catch app lifecycles on kill (and close connection)
 class ZkFinger {
   static const MethodChannel _channel =
-      const MethodChannel('io.github.cat1m.zkfinger10_16kb/method');
+      MethodChannel('io.github.cat1m.zkfinger10_16kb/method');
 
   static const EventChannel statusChangeStream =
       EventChannel('io.github.cat1m.zkfinger10_16kb/status_change');

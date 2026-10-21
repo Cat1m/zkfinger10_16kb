@@ -1,3 +1,7 @@
+## 1.0.1
+
+* Fix static analysis issues reported by pub.dev (no API changes): use `debugPrint` in `FingerStatus.log()`, drop a redundant `const`.
+
 ## 1.0.0
 
 First release of `zkfinger10_16kb`, based on [zkfinger10 1.0.0+2](https://pub.dev/packages/zkfinger10).

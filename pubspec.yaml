@@ -1,6 +1,6 @@
 name: zkfinger10_16kb
 description: ZKTeco fingerprint scanner plugin (enroll, identify, verify) for Android, patched to run on 16 KB page size devices. Fork of zkfinger10.
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/Cat1m/zkfinger10_16kb
 repository: https://github.com/Cat1m/zkfinger10_16kb
 issue_tracker: https://github.com/Cat1m/zkfinger10_16kb/issues
