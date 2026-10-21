@@ -1,35 +1,69 @@
-# flutter_zkfinger10 (fork nội bộ)
+# zkfinger10_16kb
 
-Fork của [zkfinger10 1.0.0+2](https://pub.dev/packages/zkfinger10) (Mamasodikov/zk_finger_10), dùng cho HisMobile.
-
-## Thay đổi so với bản gốc
-- **Vá 16 KB page size** cho 4 thư viện ZKTeco arm64 (`libslkidcap`, `libzkalg12`, `libzkfinger10`, `libzksensorcore`).
-  Các file này được build bằng GCC 4.9 (NDK <= r17): segment LOAD đã căn 64 KB, nhưng `PT_GNU_RELRO` kết thúc ở mốc 4 KB,
-  nên trên máy 16 KB linker `mprotect` lan sang `.data` gây SIGSEGV. Script `tool/patch_relro.py` đổi header RELRO thành `PT_NULL`
-  (chỉ đổi 4 byte, không đổi offset/size). Đánh đổi: các thư viện này không còn RELRO hardening.
-  Kiểm tra: `python tool/patch_relro.py --check` (exit 0 = an toàn).
-- Thêm `ZkFinger.getPageSize()` (không tải thư viện native của ZKTeco).
-
-SHA-256 trước -> sau khi vá:
-| File | Gốc | Đã vá |
-|---|---|---|
-| libslkidcap.so | 6dac3900…f4bbcc | 7135e355…c3ab64 |
-| libzkalg12.so | da72ee1d…1ab276 | b55e9c7c…a203ce |
-| libzkfinger10.so | cb61502f…fef3f3 | c9e962f4…718363 |
-| libzksensorcore.so | 8e87eaac…caf794 | 0d1d2de2…29a684 |
-
-Khi ZKTeco phát hành SDK build bằng NDK r28+, thay `.so`/`.jar` trong `android/libs` và bỏ bản vá.
-
----
-
-<div align="center"><a href="https://github.com/Safouene1/support-palestine-banner/blob/master/Markdown-pages/Support.md"><img src="https://raw.githubusercontent.com/Safouene1/support-palestine-banner/master/banner-project.svg" alt="Support Palestine" style="width: 100%;"></a></div>
-
-# zkfinger10 - Modern Fingerprint Plugin for Flutter 🚀
-
-[![pub package](https://img.shields.io/pub/v/zkfinger10.svg)](https://pub.dev/packages/zkfinger10)
+[![pub package](https://img.shields.io/pub/v/zkfinger10_16kb.svg)](https://pub.dev/packages/zkfinger10_16kb)
 [![Flutter](https://img.shields.io/badge/Flutter-3.35.3%2B-blue.svg)](https://flutter.dev)
 [![Android](https://img.shields.io/badge/Android-API%2021%2B-green.svg)](https://developer.android.com)
-[![Stand with Palestine](https://img.shields.io/badge/🇵🇸%20%20Stand%20With%20Palestine-007A3D?style=plastic&logo=liberapay&logoColor=white&labelColor=007A3D)](https://www.islamic-relief.org.uk/giving/appeals/palestine/)
+
+Flutter plugin for ZKTeco USB fingerprint scanners (enroll, identify, verify), **patched to work on Android devices with a 16 KB memory page size**.
+
+This is a fork of [zkfinger10 1.0.0+2](https://pub.dev/packages/zkfinger10) by Mamasodikov ([zk_finger_10](https://github.com/Mamasodikov/zk_finger_10)). The API is the same; only the package name, Android namespace and channel names differ.
+
+> **Unofficial.** Not affiliated with ZKTeco. The bundled `.so`/`.jar` files are ZKTeco's SDK binaries, redistributed as in the original package.
+
+## Why this fork?
+
+On 16 KB page size devices (required for new apps targeting Android 15+ on Google Play), the original package crashes with `SIGSEGV` as soon as the ZKTeco native libraries are loaded.
+
+The four arm64 libraries (`libslkidcap`, `libzkalg12`, `libzkfinger10`, `libzksensorcore`) were built with GCC 4.9 (NDK <= r17). Their `LOAD` segments are already 64 KB aligned, but `PT_GNU_RELRO` ends on a 4 KB boundary. On a 16 KB kernel the dynamic linker rounds the RELRO `mprotect` up to 16 KB and makes part of `.data` read-only, so the first write crashes.
+
+### The patch
+
+`tool/patch_relro.py` changes the `PT_GNU_RELRO` program header type to `PT_NULL` (4 bytes per file; no offsets or sizes change).
+
+**Trade-off:** these four libraries no longer get RELRO hardening. Nothing else is changed.
+
+Verify the bundled libraries:
+
+```bash
+python tool/patch_relro.py --check   # exit 0 = safe on 16 KB devices
+```
+
+SHA-256 of the patched arm64 libraries:
+
+| File | SHA-256 |
+|---|---|
+| libslkidcap.so | `7135e3557ff0baec68803081a4e151c70db489ec3200577cb6cb4c9f25c3ab64` |
+| libzkalg12.so | `b55e9c7cdbdca352e83d8605607395f516ec8459a9b6aec5ff104f9d46a203ce` |
+| libzkfinger10.so | `c9e962f48b9c82c8a948d8acc340d951f923ce5cb031ac8b3d1c094c88718363` |
+| libzksensorcore.so | `0d1d2de24da8a0dbc95f771c360c2dc3c80737fa962f3a4e8862e7004429a684` |
+
+The Android Gradle Plugin strips the libraries when building your APK, so their hashes inside the APK will differ; the patch is preserved. To verify a built app, extract `lib/arm64-v8a/` from the APK and run `python tool/patch_relro.py <dir> --check`.
+
+When ZKTeco ships an SDK built with NDK r28+, the libraries will be replaced and the patch dropped.
+
+### Extra APIs
+
+```dart
+// Page size of the running device (does not load ZKTeco libraries).
+int? pageSize = await ZkFinger.getPageSize(); // 4096 or 16384
+
+// Loads the ZKTeco native libraries and initializes the algorithm without a scanner.
+// Useful to confirm the app does not crash on a 16 KB device.
+List<String> log = await ZkFinger.selfTest();
+```
+
+## Migrating from zkfinger10
+
+1. Replace the dependency:
+   ```yaml
+   dependencies:
+     zkfinger10_16kb: ^1.0.0
+   ```
+2. Replace imports: `package:zkfinger10/...` → `package:zkfinger10_16kb/...`.
+
+Everything else (method names, events, the `zkfinger10.db` template database) stays the same, so enrolled fingerprints are kept.
+
+---
 
 ## 📱 **Sample Screenshot**
 
@@ -87,7 +121,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  zkfinger10: ^1.0.0
+  zkfinger10_16kb: ^1.0.0
 ```
 
 Then run:
@@ -148,7 +182,7 @@ Create `android/app/src/main/res/xml/device_filter.xml` with the following conte
 ### **Core Methods**
 
 ```dart
-import 'package:zkfinger10/zkfinger10.dart';
+import 'package:zkfinger10_16kb/zk_finger.dart';
 
 // Initialize connection
 await ZkFinger.openConnection();
@@ -192,12 +226,12 @@ bool? exists = await ZkFinger.checkUserExists(userId: "user123");
 
 ```dart
 // Listen to fingerprint status changes
-ZkFinger.fingerStatusChangeStream.listen((status) {
-  print('Status: ${status['message']}');
+ZkFinger.statusChangeStream.receiveBroadcastStream().listen((status) {
+  print('Status: $status');
 });
 
 // Listen to fingerprint image data
-ZkFinger.fingerImageStream.listen((imageBytes) {
+ZkFinger.imageStream.receiveBroadcastStream().listen((imageBytes) {
   // Process fingerprint image
 });
 ```
@@ -244,16 +278,18 @@ If upgrading from an older version:
 
 Found a bug or want to contribute?
 
-- **Issues**: [GitHub Issues](https://github.com/Mamasodikov/zk_finger_10/issues)
-- **Pull Requests**: [GitHub PRs](https://github.com/Mamasodikov/zk_finger_10/pulls)
+- **Issues**: [GitHub Issues](https://github.com/Cat1m/zkfinger10_16kb/issues)
+- **Pull Requests**: [GitHub PRs](https://github.com/Cat1m/zkfinger10_16kb/pulls)
+- **Original package**: [Mamasodikov/zk_finger_10](https://github.com/Mamasodikov/zk_finger_10)
 - **SDK Reference**: [ZKFinger10Demo](https://github.com/Mamasodikov/ZKFinger10Demo)
 
 ## 📄 **License**
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the BSD 3-Clause License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 **Acknowledgments**
 
+- [Mamasodikov](https://github.com/Mamasodikov) for the original `zkfinger10` plugin
 - ZKTeco for the original SDK
 - Flutter community for continuous support
 - All contributors who helped modernize this plugin

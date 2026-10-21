@@ -1,13 +1,17 @@
-## 1.0.0+2-16kb.2 (fork)
+## 1.0.0
 
-* Add `ZkFinger.selfTest()`: load ZKTeco native libraries and init the algorithm without a scanner (16 KB device check).
+First release of `zkfinger10_16kb`, based on [zkfinger10 1.0.0+2](https://pub.dev/packages/zkfinger10).
 
-## 1.0.0+2-16kb (fork)
-
-* Patch PT_GNU_RELRO -> PT_NULL in arm64 ZKTeco libraries for 16 KB page size devices (`tool/patch_relro.py`).
+* **16 KB page size support**: patch `PT_GNU_RELRO` -> `PT_NULL` in the arm64 ZKTeco libraries (`libslkidcap`, `libzkalg12`, `libzkfinger10`, `libzksensorcore`). See `tool/patch_relro.py`.
 * Add `ZkFinger.getPageSize()`.
+* Add `ZkFinger.selfTest()`: load the ZKTeco native libraries and init the algorithm without a scanner.
+* **BREAKING (vs zkfinger10)**: package renamed to `zkfinger10_16kb`; Android namespace and channel names moved to `io.github.cat1m.zkfinger10_16kb`. Public Dart API is unchanged.
 
-## 1.0.0 - Major Modernization Release 🚀
+---
+
+Changelog of the original `zkfinger10` package:
+
+## zkfinger10 1.0.0 - Major Modernization Release 🚀
 
 **BREAKING CHANGES:**
 * **Flutter v3.35.3 Compatibility**: Updated plugin to work with Flutter v3.35.3 and latest Dart SDK
@@ -51,27 +55,27 @@
 * **Android**: API 21+ (Android 5.0+)
 * **Target Android**: API 34 (Android 14)
 
-## 0.0.6
+## zkfinger10 0.0.6
 
 * added "verify" (match 2 fingers: 1:1 comparison) and "clearAndLoad" methods (batch load to database)
 
-## 0.0.5
+## zkfinger10 0.0.5
 
 * Hot fixes related to x86 architecture
 
-## 0.0.4
+## zkfinger10 0.0.4
 
 * Support for x86_64 devices (x86 via ARM emulation)
 * Bug fixes
 
-## 0.0.3
+## zkfinger10 0.0.3
 
 * minor fixes*
 
-## 0.0.2
+## zkfinger10 0.0.2
 
 * Some hotfixes*
 
-## 0.0.1
+## zkfinger10 0.0.1
 
 * This is initial release of zkfinger10 package
